@@ -1,6 +1,7 @@
 package com.spooky.events.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,10 +32,14 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     private Event event;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
     private User writtenBy;
     
     public Message() {
+    }
+    public Message(String content, Event event, User writtenBy) {
+   	 this.setContent(content);
+   	 this.setEvent(event);
+   	 this.setWrittenBy(writtenBy);
     }
     @PrePersist
     protected void onCreate(){

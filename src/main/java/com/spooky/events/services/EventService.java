@@ -105,8 +105,11 @@ public class EventService {
 		eventRepository.delete(e);
 	}
 	public void createEvent(Event e) {
-			eventRepository.save(e);
+		eventRepository.save(e);
 	}
+	public Message createMessage(Message m) {
+		return messageRepository.save(m);
+}
 	public void saveUser(User u) {
 		userRepository.save(u);
 	}

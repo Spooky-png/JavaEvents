@@ -89,7 +89,7 @@ public class EventController {
 	public String createEvent(@Valid @ModelAttribute("event") Event event,BindingResult result,RedirectAttributes redirectAttr, HttpSession session){
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/login";
+			 return "redirect:/";
 		}
 		if(result.hasErrors()) {
 			return "/events/dashboard.jsp";
@@ -102,6 +102,20 @@ public class EventController {
 		}
 		eventService.createEvent(event);
 		return "redirect:/events";
+	}
+	@PostMapping("/newmessage/{id}")
+	public String createMessage(@PathVariable("id") Long eventId,@Valid @ModelAttribute("message") Message m, BindingResult result, HttpSession session) {
+		Long userId = (Long) session.getAttribute("user_id");
+		Event event = eventService.findEvent(eventId);
+		if (userId == null) {
+			 return "redirect:/";
+		}
+		User user = eventService.findUserById(userId);
+		m.setWrittenBy(user);
+		eventService.createMessage(m);
+		event.getMessages().add(m);
+		eventService.createEvent(event);
+		return "redirect:/events/event/{id}";
 	}
 	@GetMapping("/events/{id}/a/join")
 	public String joinEvent(HttpSession session, @PathVariable("id") Long eventId) {
@@ -140,6 +154,7 @@ public class EventController {
 		Event event = eventService.findEvent(eventId);
 		List<User> numberofpeople = event.getAttendees();
 		int number = numberofpeople.size();
+		System.out.println(messageRepository.findAll());
 		model.addAttribute("number", number);
 		model.addAttribute("event", eventService.getEventById(eventId));
 		return "/events/viewEvents.jsp";
@@ -158,7 +173,6 @@ public class EventController {
 		}
 		
 		Event event = eventService.findEvent(id);
-		System.out.println(event.getId());
 		model.addAttribute("event", event);
 		model.addAttribute("userID", userId);
 		return "/events/editEvents.jsp";
@@ -175,9 +189,6 @@ public class EventController {
 			redirectAttr.addFlashAttribute("error","Date must be at a future time");
 			return "redirect:/events/edit/{id}";
 		}
-		System.out.println("INSIDE THE UPDATE METHOD");
-		System.out.println(event.getHost().getFirstName());
-		System.out.println(event.getId());
 		eventService.createEvent(event);
 		return "redirect:/events";
 	}
