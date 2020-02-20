@@ -11,7 +11,7 @@
 			crossorigin="anonymous">
 			<link rel="stylesheet" href="css/registration.css" />
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Registration</title>
 </head>
 <body>
 <div class="background">
