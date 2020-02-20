@@ -10,13 +10,14 @@
 			rel="stylesheet" 
 			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
 			crossorigin="anonymous">
+			<link rel="stylesheet" type="text/css" href="/css/editEvents.css" />
 <meta charset="ISO-8859-1">
 <title>Edit Event</title>
 </head>
 <body>
 <div class="container">
 <div class="edit-event float float-left">
-				<p>Plan an Event:</p>
+				<h1>Edit <c:out value="${event.name }"></c:out></h1>
 				<p><form:errors path="event.*"/></p>
 				<p><c:out value="${error}"/></p>
 			<form:form action="/editevent/${event.id}" method="post" modelAttribute="event">
@@ -42,7 +43,7 @@
 			        <form:errors path="state"/>
 					<form:input class="form-control" path="state"/>
 			    </div>
-			    <button>Edit Event</button>
+			    <button class="myButton">Edit Event</button>
 			</form:form>
 			</div>
 			</div>

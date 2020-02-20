@@ -5,59 +5,62 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+			rel="stylesheet" 
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+			crossorigin="anonymous">
+			<link rel="stylesheet" href="css/login.css" />
     <meta charset="UTF-8">
     <title>Registration Page</title>
 </head>
 <body>
+<div class="background">
+<div class="container">
+<div class="register">
     <h1>Register!</h1>
     
     <p><form:errors path="user.*"/></p>
-    <p><c:out value="${error}"/></p>
+    <p><c:out value="${errors}"/></p>
     
     <form:form method="POST" action="/registration" modelAttribute="user">
     	<p>
-            <form:label path="firstName">First Name:</form:label>
-            <form:input path="firstName"/>
+            <form:input path="firstName" placeholder="First Name"/>
         </p>
         <p>
-            <form:label path="lastName">Last Name:</form:label>
-            <form:input path="lastName"/>
+            <form:input path="lastName" placeholder="Last Name"/>
         </p>
         <p>
-            <form:label path="email">Email:</form:label>
-            <form:input type="email" path="email"/>
+            <form:input type="email" path="email" placeholder="Email"/>
         </p>
         <p>
-            <form:label path="state">State:</form:label>
-            <form:input path="state"/>
+            <form:input path="location" placeholder="City"/>
+        </p>
+         <p>
+            <form:input path="state" placeholder="State"/>
         </p>
         <p>
-            <form:label path="location">City:</form:label>
-            <form:input path="location"/>
+            <form:password path="password" placeholder="Password"/>
         </p>
         <p>
-            <form:label path="password">Password:</form:label>
-            <form:password path="password"/>
+            <form:password path="passwordConfirmation" placeholder="Confirm Password"/>
         </p>
-        <p>
-            <form:label path="passwordConfirmation">Password Confirmation:</form:label>
-            <form:password path="passwordConfirmation"/>
-        </p>
-        <input type="submit" value="Register!"/>
+        <input class="button" type="submit" value="Register!"/>
     </form:form>
+    </div>
+    <div class="login float float-left">
         <h1>Login</h1>
     <p><c:out value="${error}" /></p>
     <form method="post" action="/login">
         <p>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email"/>
+            <input type="text" id="email" name="email" placeholder="Email"/>
         </p>
         <p>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password"/>
+            <input type="password" id="password" name="password" placeholder="Password"/>
         </p>
-        <input type="submit" value="Login!"/>
+        <input class="button" type="submit" value="Login!"/>
     </form>
-    
+    </div>
+    </div>
+    </div>
 </body>
 </html>

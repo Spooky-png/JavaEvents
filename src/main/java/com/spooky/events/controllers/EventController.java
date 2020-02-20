@@ -47,11 +47,11 @@ public class EventController {
 	@PostMapping(value="/registration")
 	 public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session, RedirectAttributes redirectAttr) {
 		 if (result.hasErrors()) {
-			 redirectAttr.addFlashAttribute("error", result.getAllErrors().get(0));
+			 redirectAttr.addFlashAttribute("errors", result.getAllErrors().get(0));
 			 return "redirect:/";
 		 }else {
 			 if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-				 redirectAttr.addFlashAttribute("error", "Passwords Don't Match");
+				 redirectAttr.addFlashAttribute("errors", "Passwords Don't Match");
 				 return "redirect:/";
 			 }
 			 eventService.registerUser(user);
@@ -76,7 +76,7 @@ public class EventController {
 	public String eventsPage(Model model, HttpSession session, @ModelAttribute("event") Event event) {
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/login";
+			 return "redirect:/";
 		}
 		User user = eventService.findUserById(userId);
 		model.addAttribute("user", user);
@@ -135,7 +135,7 @@ public class EventController {
 	public String cancelJoinEvent(HttpSession session, @PathVariable("id") Long eventId) {
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/login";
+			 return "redirect:/";
 		}
 		User user = eventService.findUserById(userId);
 		user.getAttending().remove(eventService.getEventById(eventId));
@@ -149,12 +149,11 @@ public class EventController {
 	public String eventPage(@PathVariable("id") Long eventId, Model model, @ModelAttribute("message") Message message, HttpSession session) {
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/login";
+			 return "redirect:/";
 		}
 		Event event = eventService.findEvent(eventId);
 		List<User> numberofpeople = event.getAttendees();
 		int number = numberofpeople.size();
-		System.out.println(messageRepository.findAll());
 		model.addAttribute("number", number);
 		model.addAttribute("event", eventService.getEventById(eventId));
 		return "/events/viewEvents.jsp";
@@ -181,7 +180,7 @@ public class EventController {
 	public String editEvent(@PathVariable("id") Long id,@ModelAttribute("event") Event event, HttpSession session, RedirectAttributes redirectAttr){
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/login";
+			 return "redirect:/";
 		}
 		Date d = event.getDate();
 		Date current = new Date();

@@ -10,11 +10,12 @@
 			rel="stylesheet" 
 			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
 			crossorigin="anonymous">
-		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="css/dashboard.css" />
 		<meta charset="ISO-8859-1">
 	<title>Event Planner</title>
 </head>
 	<body>
+	<div id="background">
 		<div class="container">
 			<h2>Welcome, ${ user.firstName }</h2>
 			<a href="/logout">Logout</a>
@@ -50,7 +51,7 @@
 			</div>
 			<div class="float float-left">
 				<h3>Here are some events in your state:</h3>
-				<table class="table table-hover">
+				<table class="table table-hover table-dark">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -70,10 +71,10 @@
 							<td>
 							<c:choose>
 								<c:when test="${ event.host.id == user.id }">
-									<a href="/events/edit/${ event.id }">Edit</a> |
+									<a class="myButton" href="/events/edit/${ event.id }">Edit</a> |
 									<form class="delete-form" action="/events/event/${ event.id }" method="post">
 										<input type="hidden" name="_method" value="delete" />
-										<button>Delete</button>
+										<button class="deleteButton">Delete</button>
 									</form>
 								</c:when>
 								<c:otherwise>
@@ -94,7 +95,7 @@
 					</tbody>
 				</table>
 				<h3>Here are some events in other states:</h3>
-				<table class="table table-hover">
+				<table class="table table-hover table-dark">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -140,6 +141,7 @@
 					</tbody>
 				</table>
 			</div>
+		</div>
 		</div>
 	</body>
 </html>
