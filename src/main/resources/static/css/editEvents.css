@@ -27,24 +27,23 @@ h1, label{
 }
 #background{
 	background-color: black;
-	height: 1000px;	
+	height: 753px;	
 }
 .container{
-	padding: 100px;
-	background-image: url(https://thumbs.gfycat.com/ColdFlimsyIrrawaddydolphin-size_restricted.gif);
-	height: 1000px;
-	background-size: cover;
-}
-.attendees{
-	display: inline-block;
-	width: 500px;
-}
-.messagewall{
 	background-image: url(https://i.pinimg.com/originals/ac/2b/7e/ac2b7e59b19e4d1ec776b67344616421.gif);
+	padding: 100px;
+	height: 749px;
+}
+.edit-event{
+	background: rgb(119,119,119);
+	background: linear-gradient(0deg, rgba(119,119,119,1) 0%, rgba(253,124,45,1) 100%);
 	padding: 20px;
 	border-radius: 50px;
 	width: 500px;
 }
-h6{
-	color: #74899d;
+a{
+	color: yellow;
+}
+a:hover{
+	color: gold;
 }

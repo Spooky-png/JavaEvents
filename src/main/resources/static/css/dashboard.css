@@ -7,7 +7,7 @@
 	background-image: url(https://i.imgur.com/wDK13IF.gif);
 	height: 760px;
 }
-h2, h3, p, label{
+h2, h3, p{
 	color: #00c8c8;
 }
 a{
@@ -67,6 +67,7 @@ a:hover{
 	display: inline-block;
 }
 .new-event{
+	color: red;
 	background-color: black;
 	padding: 20px;
 	border-radius: 30px;

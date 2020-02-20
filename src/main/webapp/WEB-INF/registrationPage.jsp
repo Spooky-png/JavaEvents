@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>    
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,9 +9,9 @@
 			rel="stylesheet" 
 			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
 			crossorigin="anonymous">
-			<link rel="stylesheet" href="css/login.css" />
-    <meta charset="UTF-8">
-    <title>Registration Page</title>
+			<link rel="stylesheet" href="css/registration.css" />
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
 </head>
 <body>
 <div class="background">
@@ -20,7 +20,7 @@
     <h1>Register!</h1>
     
     <p><form:errors path="user.*"/></p>
-    <p><c:out value="${errors}"/></p>
+    <p><c:out value="${error}"/></p>
     
     <form:form method="POST" action="/registration" modelAttribute="user">
     	<p>
@@ -46,19 +46,6 @@
         </p>
         <input class="button" type="submit" value="Register!"/>
     </form:form>
-    </div>
-    <div class="login float float-left">
-        <h1>Login</h1>
-    <p><c:out value="${error}" /></p>
-    <form method="post" action="/login">
-        <p>
-            <input type="text" id="email" name="email" placeholder="Email"/>
-        </p>
-        <p>
-            <input type="password" id="password" name="password" placeholder="Password"/>
-        </p>
-        <input class="button" type="submit" value="Login!"/>
-    </form>
     </div>
     </div>
     </div>

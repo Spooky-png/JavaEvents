@@ -25,6 +25,7 @@ import com.spooky.events.repositories.EventRepository;
 import com.spooky.events.repositories.MessageRepository;
 import com.spooky.events.repositories.UserRepository;
 import com.spooky.events.services.EventService;
+import com.spooky.events.validator.UserValidator;
 
 @Controller
 public class EventController {
@@ -32,27 +33,33 @@ public class EventController {
 	private final EventRepository eventRepository;
 	private final MessageRepository messageRepository;
 	private final UserRepository userRepository;
+	private final UserValidator userValidator;
 	
-	public EventController(EventService eventService,EventRepository eventRepository,MessageRepository messageRepository,UserRepository userRepository) {
+	public EventController(UserValidator userValidator, EventService eventService,EventRepository eventRepository,MessageRepository messageRepository,UserRepository userRepository) {
 		this.eventRepository = eventRepository;
 		this.messageRepository = messageRepository;
 		this.userRepository = userRepository;
 		this.eventService = eventService;
+		this.userValidator = userValidator;
 	}
 	
+	@GetMapping("/login")
+	public String login() {
+		return "/loginPage.jsp";
+	}
 	@GetMapping("/")
-	public String login(@ModelAttribute("user") User user) {
-		return "/events/loginPage.jsp";
+	public String registration(@ModelAttribute("user") User user) {
+		return "/registrationPage.jsp";
 	}
 	@PostMapping(value="/registration")
-	 public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session, RedirectAttributes redirectAttr) {
+	 public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session, Model model) {
+		userValidator.validate(user, result);
 		 if (result.hasErrors()) {
-			 redirectAttr.addFlashAttribute("errors", result.getAllErrors().get(0));
-			 return "redirect:/";
+			 return "/registrationPage.jsp";
 		 }else {
 			 if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-				 redirectAttr.addFlashAttribute("errors", "Passwords Don't Match");
-				 return "redirect:/";
+				 model.addAttribute("password", "Passwords do not match");
+				 return "redirect:/registration";
 			 }
 			 eventService.registerUser(user);
 			 session.setAttribute("user_id", user.getId());
@@ -60,39 +67,37 @@ public class EventController {
 		 }
 	 }
 	@PostMapping(value="/login")
-	 public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, RedirectAttributes redirectAttr, HttpSession session) {
-		 User user = eventService.findByEmail(email);
-		 if (user == null) {
-			 redirectAttr.addFlashAttribute("error","No Such User");
-		 }else if (!eventService.authenticateUser(email, password)) {
-			 redirectAttr.addFlashAttribute("error","Invalid Password");
+	 public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session) {
+		 if (!eventService.authenticateUser(email, password)) {
+			 model.addAttribute("invalid", "Invalid credentials");
+			 return "/loginPage.jsp";
 		 }else {
+			 User user = eventService.findByEmail(email);
 			 session.setAttribute("user_id", user.getId());
 			 return "redirect:/events";
 		 }
-		 return "redirect:/";
 	 }
 	@GetMapping("/events")
 	public String eventsPage(Model model, HttpSession session, @ModelAttribute("event") Event event) {
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/";
+			 return "redirect:/login";
 		}
 		User user = eventService.findUserById(userId);
 		model.addAttribute("user", user);
 		model.addAttribute("eventsInState", eventService.getEventsInState(user.getState()));
 		model.addAttribute("otherEvents", eventService.getEventsOutOfState(user.getState()));
 		model.addAttribute("now",new Date());
-		return "/events/dashboard.jsp";
+		return "/dashboard.jsp";
 	}
 	@PostMapping("/newevent")
 	public String createEvent(@Valid @ModelAttribute("event") Event event,BindingResult result,RedirectAttributes redirectAttr, HttpSession session){
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/";
+			 return "redirect:/login";
 		}
 		if(result.hasErrors()) {
-			return "/events/dashboard.jsp";
+			return "/dashboard.jsp";
 		}
 		Date d = event.getDate();
 		Date current = new Date();
@@ -108,7 +113,7 @@ public class EventController {
 		Long userId = (Long) session.getAttribute("user_id");
 		Event event = eventService.findEvent(eventId);
 		if (userId == null) {
-			 return "redirect:/";
+			 return "redirect:/login";
 		}
 		User user = eventService.findUserById(userId);
 		m.setWrittenBy(user);
@@ -135,7 +140,7 @@ public class EventController {
 	public String cancelJoinEvent(HttpSession session, @PathVariable("id") Long eventId) {
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/";
+			 return "redirect:/login";
 		}
 		User user = eventService.findUserById(userId);
 		user.getAttending().remove(eventService.getEventById(eventId));
@@ -149,14 +154,14 @@ public class EventController {
 	public String eventPage(@PathVariable("id") Long eventId, Model model, @ModelAttribute("message") Message message, HttpSession session) {
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/";
+			 return "redirect:/login";
 		}
 		Event event = eventService.findEvent(eventId);
 		List<User> numberofpeople = event.getAttendees();
-		int number = numberofpeople.size();
+		int number = numberofpeople.size()+1;
 		model.addAttribute("number", number);
 		model.addAttribute("event", eventService.getEventById(eventId));
-		return "/events/viewEvents.jsp";
+		return "/viewEvents.jsp";
 	}
 	@DeleteMapping("/events/event/{id}")
 	public String deleteEvent(@PathVariable("id") Long eventId, Model model) {
@@ -174,13 +179,13 @@ public class EventController {
 		Event event = eventService.findEvent(id);
 		model.addAttribute("event", event);
 		model.addAttribute("userID", userId);
-		return "/events/editEvents.jsp";
+		return "/editEvents.jsp";
 	}
 	@PutMapping("/editevent/{id}")
 	public String editEvent(@PathVariable("id") Long id,@ModelAttribute("event") Event event, HttpSession session, RedirectAttributes redirectAttr){
 		Long userId = (Long) session.getAttribute("user_id");
 		if (userId == null) {
-			 return "redirect:/";
+			 return "redirect:/login";
 		}
 		Date d = event.getDate();
 		Date current = new Date();
@@ -194,6 +199,6 @@ public class EventController {
 	@GetMapping("/logout")
 	 public String logout(HttpSession session) {
 		 session.invalidate();
-		 return "redirect:/";
+		 return "redirect:/login";
 	 }
 }

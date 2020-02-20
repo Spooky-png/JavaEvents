@@ -47,3 +47,9 @@ h1, p{
 h6{
 	color: #74899d;
 }
+a{
+	color: yellow;
+}
+a:hover{
+	color: gold;
+}

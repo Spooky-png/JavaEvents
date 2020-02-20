@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +24,7 @@ public class Message {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message="Message can't be empty")
     private String content;
     @Column(updatable=false)
     @DateTimeFormat(pattern="yyyy-MM-dd")

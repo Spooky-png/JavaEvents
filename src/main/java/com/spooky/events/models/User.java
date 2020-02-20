@@ -19,6 +19,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,11 +39,14 @@ public class User {
     @Size(min=2, message="Location must be at least 2 characters.")
     private String location;
     @Email(message="Email must be valid")
+    @NotBlank(message="Email cannot be blank")
     private String email;
     @Size(min=5, message="Password must be at least 5 characters.")
     private String password;
     @Transient
     private String passwordConfirmation;
+    @Transient
+    private boolean duplicate;
     @Column(updatable=false)
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date createdAt;
@@ -89,6 +93,12 @@ public class User {
     }
     public void setLastName(String lastName) {
     	this.lastName = lastName;
+    }
+    public boolean getDuplicate() {
+    	return duplicate;
+    }
+    public void setDuplicate(boolean duplicate) {
+    	this.duplicate = duplicate;
     }
     public String getLocation() {
     	return location;

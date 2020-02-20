@@ -21,18 +21,18 @@
 			<a href="/logout">Logout</a>
 			<hr />
 			<div class="new-event float float-right">
-				<p>Plan an Event:</p>
+				<h6>Plan an Event:</h6>
 				<p><form:errors path="event.*"/></p>
 				<p><c:out value="${error}"/></p>
 				<form:form action="/newevent" method="post" modelAttribute="event">
 					<form:hidden value="${ user.id }" path="host"/>
 					<div class="form-group">
-						<form:label path="name">Name</form:label>
+						<form:label path="name">Event Name</form:label>
 						<form:errors path="name"></form:errors>
 						<form:input class="form-control" path="name"></form:input>
 					</div>
 					<div class="form-group">
-						<form:label path="date">Date</form:label>
+						<form:label path="date">Event Date</form:label>
 						<form:errors path="date"></form:errors>
 						<form:input class="form-control" type="date" value="${ now }" path="date"></form:input>
 					</div>
@@ -118,7 +118,7 @@
 							<c:choose>
 								<c:when test="${ event.host.id == user.id }">
 									<a href="/events/edit/${event.id}">Edit</a> |
-									<form class="delete-form" action="/events/${ event.id }" method="post">
+									<form class="delete-form" action="/events/event/${ event.id }" method="post">
 										<input type="hidden" name="_method" value="delete" />
 										<button>Delete</button>
 									</form>

@@ -15,6 +15,7 @@
 <body>
 	<div id="background">
 		<div class="container">
+		<a href="/events">Dashboard</a>
 		<div class="messagewall float float-right">
 				<h3>Message Wall</h3>
 				<c:forEach items="${ event.messages }" var="message">
